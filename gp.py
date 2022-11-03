@@ -12,7 +12,7 @@ elif __file__:
     DIR = os.path.dirname(__file__)
 
 
-#DIR = 'C:\\Users\\promind\\Desktop\\PY\\Code\\file_rename\\gopro'
+
 
 print('CURRENT DIR ' + DIR)
 
