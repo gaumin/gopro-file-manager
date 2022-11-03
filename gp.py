@@ -3,7 +3,7 @@ from datetime import datetime
 import sys
 
 NAME_LENGTH = 4
-ALLOWED_EXTENSIONS = ('jpg', 'm4v', 'mp4', 'thm', '.csv')
+ALLOWED_EXTENSIONS = ('.jpg', '.m4v', '.mp4', '.thm', '.lrv')
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -11,8 +11,8 @@ if getattr(sys, 'frozen', False):
 elif __file__:
     DIR = os.path.dirname(__file__)
 
-
-
+#Remove before PUSH
+#DIR = 'C:\\Users\\promind\\Desktop\\PY\\Code\\file_rename\\gopro'
 
 print('CURRENT DIR ' + DIR)
 
@@ -40,7 +40,7 @@ def readFilesToList(dir):
         file_name, file_extension = os.path.splitext(dir + '\\' + files)
 
         # checks if the file is not a folder of exe
-        if(len(file_extension) > 1 and file_extension !='.exe'):
+        if(file_extension.lower() in ALLOWED_EXTENSIONS):
             file_url = file_name + file_extension
             date = os.path.getmtime(file_url)
             filelist[file_name[len(dir)+1:] + file_extension] = datetime.fromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S')
