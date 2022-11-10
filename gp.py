@@ -107,12 +107,7 @@ def renameFilesInDirectory(dir):
 
     for f in filelist:
         current +=1
-        new_name = str(current)
-        length = 1
-
-        while length < FILE_NAME_LENGTH:
-            new_name = '0' + new_name
-            length = len(str(new_name))
+        new_name = str(current).zfill(FILE_NAME_LENGTH)
 
         prefix = ""
         if (f[1][2][1:] in VIDEO_FILES_EXTENSIONS):
@@ -169,13 +164,7 @@ def formatFileSizeRecord(file_size):
     whole_number = file_size.split(".")[0]
     decimal_number = file_size.split(".")[1]
 
-    while len(whole_number) < FILE_SIZE_LENGTH:
-        whole_number = "0" + whole_number
-
-    while len(decimal_number) < 2:
-        decimal_number = decimal_number + "0"
-
-    return whole_number + '.' + decimal_number + ' MB'
+    return whole_number.zfill(FILE_SIZE_LENGTH) + '.' + decimal_number.zfill(2) + ' MB'
 
 # Execute
 # step1 - move files to directories by extensions
