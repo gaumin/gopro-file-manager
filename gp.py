@@ -25,7 +25,7 @@ elif __file__:
     DIR = os.path.dirname(__file__)
 
 # Location to files when testing a code
-# DIR = 'D:\\footage\\gopro\\'
+DIR = 'D:\\footage\\gopro\\'
 
 logging.basicConfig(
     filename=DIR +"\\"+ "log.txt", force=True,
@@ -35,7 +35,7 @@ logging.basicConfig(
 
 print('Current directory: ' + DIR)
 
-# Command promt to ask user to proceed
+# Ask user's approval to proceed-
 response = ""
 while (response != "y" or response != "n"):
     if (response == "n"):
@@ -76,7 +76,7 @@ def create_directory(path):
 
 def set_prefix(file_size):
     """
-    Returns special prefix if file size is smaller than defined, otherwise returns empty string
+    Returns a special prefix "s_" if file size is smaller than defined, otherwise returns empty string
     """
     if (file_size < MINIMUM_FILE_SIZE):
         return "s_"
@@ -87,9 +87,13 @@ def rename_file(current, new, file_size):
     """
     Renames 'current' file name to 'new'. Working on absolute file path
     """
+
+    old_path = DIR + '\\' + current.split('\\')[-1]
+
     try:
         os.rename(current, new)
-        logging.info(f'{file_size}  {remove_double_backslash(current)} --> {remove_double_backslash(new)}')
+        logging.info(f'{file_size}  {remove_double_backslash(old_path)} --> {remove_double_backslash(new)}')
+
     except:
         print(f'Error. Cant rename file: {remove_double_backslash(current)}')
         logging.error(f'Cant rename file: {remove_double_backslash(current)}')
@@ -145,7 +149,7 @@ def move_files_to_directory(dir):
 
 def remove_double_backslash(path):
     """
-    Replace double backslash (\\) to single (\)
+    Replace double backslash (\\) to a single (\)
     """
     return path.replace(chr(92)+chr(92), chr(92))
 
