@@ -46,7 +46,7 @@ while (response != "y" or response != "n"):
         break
     response = input("Confirm to rename and move files (y/n): ")
 
-def readFilesToList(dir):
+def read_files(dir):
     """
     Read file names from 'dir' and return a dict as a result
     """
@@ -60,11 +60,11 @@ def readFilesToList(dir):
             file_path = file_name + file_extension
             date = os.path.getmtime(file_path)
             filelist[file_name[len(dir)+1:] + file_extension] = [datetime.fromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S'),
-                                                                 fileSize(file_path),
+                                                                 get_file_size(file_path),
                                                                  file_extension.lower()]
     return filelist
 
-def createDirectory(path):
+def create_directory(path):
     """
     Check whether the specified path exists or not
     """
@@ -74,7 +74,7 @@ def createDirectory(path):
         os.makedirs(path.upper())
         print(f"New directory {path} has been created!")
 
-def setPrefix(file_size):
+def set_prefix(file_size):
     """
     Returns special prefix if file size is smaller than defined, otherwise returns empty string
     """
@@ -83,24 +83,24 @@ def setPrefix(file_size):
     else:
         return ""
 
-def renameFile(current, new, file_size):
+def rename_file(current, new, file_size):
     """
     Renames 'current' file name to 'new'. Working on absolute file path
     """
     try:
         os.rename(current, new)
-        logging.info(f'{file_size}  {removeDoubleBackSlash(current)} --> {removeDoubleBackSlash(new)}')
+        logging.info(f'{file_size}  {remove_double_backslash(current)} --> {remove_double_backslash(new)}')
     except:
-        print(f'Error. Cant rename file: {removeDoubleBackSlash(current)}')
-        logging.error(f'Cant rename file: {removeDoubleBackSlash(current)}')
+        print(f'Error. Cant rename file: {remove_double_backslash(current)}')
+        logging.error(f'Cant rename file: {remove_double_backslash(current)}')
 
-def renameFilesInDirectory(dir):
+def rename_files_in_directory(dir):
     """
     Renames all files in directory
     """
     current = 0
 
-    filelist = readFilesToList(dir)
+    filelist = read_files(dir)
 
     # Sort by file datestamp
     filelist = sorted(filelist.items(), key = lambda kv: kv[1][0])
@@ -111,20 +111,20 @@ def renameFilesInDirectory(dir):
 
         prefix = ""
         if (f[1][2][1:] in VIDEO_FILES_EXTENSIONS):
-            prefix = setPrefix(f[1][1])
+            prefix = set_prefix(f[1][1])
 
-        formated_file_size = formatFileSizeRecord(str(f[1][1]))
+        formated_file_size = format_file_size_record(str(f[1][1]))
 
-        renameFile(dir+'\\'+f[0],
-                   dir+'\\' + prefix + new_name + '.'+folder,
-                   formated_file_size)
+        rename_file(dir + '\\' + f[0],
+                    dir +'\\' + prefix + new_name + '.' + folder,
+                    formated_file_size)
 
-def moveFilesToDir(dir):
+def move_files_to_directory(dir):
     """
     Moves files to newly created directories
     """
 
-    filelist = readFilesToList(DIR)
+    filelist = read_files(DIR)
 
     if len(filelist) != 0:
         msg = str(ALLOWED_FILE_EXTENSIONS).replace("(", "").replace(")", "").replace(chr(39), "")
@@ -136,20 +136,20 @@ def moveFilesToDir(dir):
             path_current = DIR + '\\' + f[0]
             path_new = DIR + '\\' + ext + '\\' + f[0]
 
-            createDirectory(DIR + "\\" + ext)
+            create_directory(DIR + "\\" + ext)
             os.rename(path_current, path_new)
     else:
         print('No files found. Exiting..')
         logging.info('No files found. Exiting..')
         exit()
 
-def removeDoubleBackSlash(path):
+def remove_double_backslash(path):
     """
     Replace double backslash (\\) to single (\)
     """
     return path.replace(chr(92)+chr(92), chr(92))
 
-def fileSize(path):
+def get_file_size(path):
     """
     Returns file size in MB
     """
@@ -157,7 +157,7 @@ def fileSize(path):
         file_info = os.stat(path)
         return round(file_info.st_size/1048576.0, 2)
 
-def formatFileSizeRecord(file_size):
+def format_file_size_record(file_size):
     """
     Converts file size (string) to proper format for logging into log file
     """
@@ -168,11 +168,11 @@ def formatFileSizeRecord(file_size):
 
 # Execute
 # step1 - move files to directories by extensions
-moveFilesToDir(DIR)
+move_files_to_directory(DIR)
 
 # step2 - iterate through each of folder and rename files
 for folder in os.listdir(DIR):
     file_name, file_extension = os.path.splitext(folder)
 
     if(file_extension =="" and file_name.lower() in ALLOWED_FILE_EXTENSIONS):
-        renameFilesInDirectory(DIR + '\\' + folder)
+        rename_files_in_directory(DIR + '\\' + folder)
