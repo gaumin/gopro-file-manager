@@ -25,7 +25,7 @@ elif __file__:
     DIR = os.path.dirname(__file__)
 
 # Location to files when testing a code
-DIR = 'D:\\footage\\gopro\\'
+# DIR = 'D:\\footage\\gopro\\'
 
 logging.basicConfig(
     filename=DIR +"\\"+ "log.txt", force=True,

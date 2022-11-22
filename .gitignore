@@ -1,6 +1,8 @@
+dist
+venv
+github
 .idea
 __pycache__
 build/gp
-dist
 gp.spec
 log.txt
